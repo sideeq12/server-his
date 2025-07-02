@@ -111,5 +111,5 @@ app.get('/api/products', async (req, res) => {
 
 const PORT = 4000;
 app.listen(PORT, () => {
-  console.log(`🚀 Unified scraper running at http://localhost:${PORT}/api/products`);
+  console.log(` scraper running at http://localhost:${PORT}/api/products`);
 });
