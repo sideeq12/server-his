@@ -6,10 +6,11 @@ const cors = require('cors');
 
 const app = express();
 app.use(cors());
+app.use(express.json());
 
 // --- Scraper for Jumia using Cheerio ---
-const scrapeJumia = async () => {
-  const url = 'https://www.jumia.com.ng/electronics/?page=6#catalog-listing';
+const scrapeJumia = async (searchQuery = 'electronics') => {
+  const url = `https://www.jumia.com.ng/catalog/?q=${encodeURIComponent(searchQuery)}`;
   try {
     const { data: html } = await axios.get(url, {
       headers: { 'User-Agent': 'Mozilla/5.0' }
@@ -87,12 +88,13 @@ const scrapeKonga = async (browser) => {
 };
 
 // --- Unified Endpoint ---
-app.get('/api/products', async (req, res) => {
+app.post('/api/products', async (req, res) => {
   try {
+    const searchQuery = req.body.q || 'electronics';
     const browser = await puppeteer.launch({ headless: 'new' });
 
     const [jumiaData, jijiData, kongaData] = await Promise.all([
-      scrapeJumia(),
+      scrapeJumia(searchQuery),
       scrapeJiji(browser),
       scrapeKonga(browser),
     ]);
