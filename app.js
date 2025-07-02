@@ -88,9 +88,9 @@ const scrapeKonga = async (browser) => {
 };
 
 // --- Unified Endpoint ---
-app.post('/api/products', async (req, res) => {
+app.get('/api/products', async (req, res) => {
   try {
-    const searchQuery = req.body.q || 'electronics';
+    const searchQuery = req.query.search || 'electronics';
     const browser = await puppeteer.launch({ headless: 'new' });
 
     const [jumiaData, jijiData, kongaData] = await Promise.all([
